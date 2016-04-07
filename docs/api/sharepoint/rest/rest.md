@@ -7,4 +7,5 @@ Object, contains methods for working with SharePoint REST
 
 ###Properties###
 Name | Description
-[[web.ts](../../src/sharepoint/rest/web.ts)| The current web
+---- | -----------
+[web.ts](../../src/sharepoint/rest/web.ts)| The current web
