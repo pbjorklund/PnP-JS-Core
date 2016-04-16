@@ -5,6 +5,8 @@
         "jsx": "react",
         "declaration": false,
         "sourceMap": true,
-        "removeComments": true
+        "removeComments": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     }
 }
