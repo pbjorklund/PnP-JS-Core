@@ -1,22 +1,32 @@
+/// <reference path="../../../node_modules/reflect-metadata/reflect-metadata.d.ts" />
 "use strict";
 
-import { Site, SiteInterface } from "./site";
+import "reflect-metadata";
+import { SiteFactoryInterface, SiteInterface } from "./site";
 import { Web } from "./webs";
 import * as Util from "../../utils/util";
 import { Queryable } from "./queryable";
+import { inject } from "inversify";
 
 /**
  * Root of the SharePoint REST module
  */
-export class Rest {
 
+export class Rest {
+    private siteFactory: SiteFactoryInterface;
+    /**
+     *
+     */
+    constructor(@inject("SiteFactoryInterface") siteFactory: SiteFactoryInterface) {
+        this.siteFactory = siteFactory;
+    }
     /**
      * Begins a site collection scoped REST request
      *
      * @param url The base url for the request, optional if running in the context of a page
      */
-    public get site(): Site {
-        return new Site("_api", "site");
+    public get site(): SiteInterface {
+        return this.siteFactory.create("_api", "site");
     }
 
     /**
@@ -35,7 +45,7 @@ export class Rest {
      * @param hostWebUrl The absolute url of the host web
      */
     public crossDomainSite(addInWebUrl: string, hostWebUrl: string): SiteInterface {
-        return this._cdImpl<SiteInterface>(Site, addInWebUrl, hostWebUrl, "site");
+        return this._cdImpl<SiteInterface>(this.siteFactory, addInWebUrl, hostWebUrl, "site");
     }
 
     /**
@@ -44,9 +54,10 @@ export class Rest {
      * @param addInWebUrl The absolute url of the add-in web
      * @param hostWebUrl The absolute url of the host web
      */
-    public crossDomainWeb(addInWebUrl: string, hostWebUrl: string): Web {
-        return this._cdImpl<Web>(Web, addInWebUrl, hostWebUrl, "web");
-    }
+    // TODO Make it factory
+    // public crossDomainWeb(addInWebUrl: string, hostWebUrl: string): Web {
+    //     return this._cdImpl<Web>(Web, addInWebUrl, hostWebUrl, "web");
+    // }
 
     /**
      * Implements the creation of cross domain REST urls
@@ -56,7 +67,7 @@ export class Rest {
      * @param hostWebUrl The absolute url of the host web
      * @param urlPart String part to append to the url "site" | "web"
      */
-    private _cdImpl<T extends Queryable>(factory: { new (s: string): T }, addInWebUrl: string, hostWebUrl: string, urlPart: string): T {
+    private _cdImpl<T extends Queryable>(factory: { create (s: string): T }, addInWebUrl: string, hostWebUrl: string, urlPart: string): T {
 
         if (!Util.isUrlAbsolute(addInWebUrl)) {
             throw "The addInWebUrl parameter must be an absolute url.";
@@ -68,7 +79,7 @@ export class Rest {
 
         let url = Util.combinePaths(addInWebUrl, "_api/SP.AppContextSite(@target)", urlPart);
 
-        let instance = new factory(url);
+        let instance = factory.create(url);
         instance.query.add("@target", encodeURIComponent(hostWebUrl));
         return instance;
     }

@@ -7,14 +7,22 @@ import { SharePoint } from "./SharePoint/SharePoint";
 import { PnPClientStorage } from "./utils/Storage";
 import * as Configuration from "./configuration/configuration";
 import { Logger } from "./utils/logging";
-import { SiteInterface } from "./sharepoint/rest/site";
-import kernel from "./inversify.config";
-import "reflect-metadata";
+import { SiteInterface, SiteFactoryInterface } from "./sharepoint/rest/site";
+import { inject, injectable } from "inversify";
 
+export interface PnPInterface {
+    util: any;
+    sharepoint: SharePoint;
+    storage: PnPClientStorage;
+    configuration: any;
+    logging: Logger;
+    site: SiteInterface;
+}
 /**
  * Root class of the Patterns and Practices namespace, provides an entry point to the library
  */
-class PnP {
+@injectable()
+export class PnP {
     /**
      * Utility methods
      */
@@ -23,8 +31,9 @@ class PnP {
     /**
      * SharePoint
      */
+    public siteFactory;
 
-    public sharepoint = new SharePoint(this.site);
+    public sharepoint;
 
     /**
      * Provides access to local and session storage through
@@ -41,14 +50,11 @@ class PnP {
      */
     public logging = new Logger();
 
-    private site: SiteInterface;
+    public site: SiteInterface;
     /**
      *
      */
-    constructor() {
-        this.site = kernel.get<SiteInterface>("SiteInterface");
-        this.sharepoint = new SharePoint(this.site);
+    constructor(@inject("SiteFactoryInterface") siteFactory: SiteFactoryInterface) {
+        this.sharepoint = new SharePoint(siteFactory);
     }
 }
-
-export = PnP;

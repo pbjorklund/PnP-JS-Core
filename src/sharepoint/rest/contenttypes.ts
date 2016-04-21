@@ -23,26 +23,6 @@ export class ContentTypes extends QueryableCollection {
     public getById(id: string): ContentType {
         return new ContentType(this.toUrl().concat(`('${id}')`));
     }
-
-    /**
-     * Execute the get request
-     *
-     */
-    public get(): Promise<any> { return; }
-
-    /**
-     * Select the fields to return
-     *
-     * @param selects One or more fields to return
-     */
-    public select(...selects: string[]): ContentTypes { return; }
-
-    /**
-     * Applies a filter to the request
-     *
-     * @param filter The filter string (docs: https://msdn.microsoft.com/en-us/library/office/fp142385.aspx)
-     */
-    public filter(filter: string): ContentTypes { return; }
 }
 
 /**

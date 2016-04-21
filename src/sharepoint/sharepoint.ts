@@ -5,7 +5,7 @@ import "reflect-metadata";
 
 import { Provisioning } from "./Provisioning/Provisioning";
 import { Rest } from "./Rest/Rest";
-import { SiteInterface } from "./rest/site";
+import { SiteFactoryInterface } from "./rest/site";
 import { injectable, inject } from "inversify";
 
 export interface SharePointInterface {
@@ -18,8 +18,8 @@ export class SharePoint implements SharePointInterface {
     public rest: Rest;
     public provisioning: Provisioning;
 
-    constructor(@inject("SiteInterface") site: SiteInterface) {
-        this.rest = new Rest(site);
+    constructor(@inject("SiteFactoryInterface") siteFactory: SiteFactoryInterface) {
+        this.rest = new Rest(siteFactory);
         this.provisioning = new Provisioning();
     }
 }

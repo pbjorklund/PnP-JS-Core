@@ -1,36 +1,60 @@
 /// <reference path="../../../node_modules/inversify/type_definitions/inversify/inversify.d.ts" />
+/// <reference path="../../../node_modules/reflect-metadata/reflect-metadata.d.ts" />
 "use strict";
 
+import "reflect-metadata";
 import { Queryable, QueryableInstance } from "./Queryable";
 import { Web } from "./webs";
 import { Dictionary } from "../../collections/collections";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
+
+export interface Parser {
+    (r: Response): Promise<any>;
+}
 
 export interface SiteInterface {
     rootWeb: Web;
     _query: Dictionary<string>;
     _url: string;
+    _parentUrl: string;
     query: Dictionary<string>;
+    parentUrl: string;
     get(): Promise<any>;
     select(...selects: string[]): Site;
     concat(pathPart: string);
+    post(postOptions?: {}, parser?: Parser): Promise<any>;
+    defaultParser(r: Response): Promise<any>;
     append(pathPart: string);
     toUrl(): string;
     toUrlAndQuery(): string;
 }
+
+
+export interface SiteFactoryInterface {
+    create(baseUrl: string, path?: string): SiteInterface;
+}
+
+@injectable()
+export class SiteFactory implements SiteFactoryInterface {
+    public create(baseUrl: string, path?: string): SiteInterface {
+        return new Site(new SiteFactory(), baseUrl);
+    }
+}
+
 /**
  * Describes a site collection
  *
  */
-@injectable()
 export class Site extends QueryableInstance {
+    private siteFactory: SiteFactory;
     /**
      * Creates a new instance of the RoleAssignments class
      *
      * @param baseUrl The url or Queryable which forms the parent of this fields collection
      */
-    constructor(baseUrl: string, path?: string) {
+    constructor(@inject("SiteFactory") siteFactory: SiteFactory, baseUrl: string, path?: string) {
         super(baseUrl, path);
+        this.siteFactory = siteFactory;
     }
 
     /**
@@ -45,7 +69,7 @@ export class Site extends QueryableInstance {
      * Gets the context information for the site.
      */
     public getContextInfo(): Promise<any> {
-        let q = new Site("_api/contextinfo");
+        let q = this.siteFactory.create("_api/contextinfo");
         return q.post();
     }
 

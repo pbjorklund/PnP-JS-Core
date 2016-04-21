@@ -1,10 +1,13 @@
 "use strict";
 
+import kernel from "./inversify.config";
 import { expect } from "chai";
-import PnP = require("./pnp");
+import { PnPInterface } from "./pnp";
+
+
 
 describe("PnP", () => {
-    let pnp = new PnP();
+    let pnp = kernel.get<PnPInterface>("PnPInterface");
 
     it("util should not be null", () => {
         expect(pnp.util).to.not.be.null;

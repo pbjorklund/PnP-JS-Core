@@ -53,9 +53,9 @@ export class Queryable {
     public _url: string;
 
     /**
-     * Stores the parent url used to create this instance, for recursing back up the tree if needed 
+     * Stores the parent url used to create this instance, for recursing back up the tree if needed
      */
-    private _parentUrl: string;
+    public _parentUrl: string;
 
     /**
      * Directly concatonates the supplied string to the current url, not normalizing "/" chars
@@ -77,9 +77,9 @@ export class Queryable {
 
     /**
      * Gets the parent url used when creating this instance
-     * 
+     *
      */
-    protected get parentUrl(): string {
+    public get parentUrl(): string {
         return this._parentUrl;
     }
 
@@ -125,7 +125,7 @@ export class Queryable {
 
     /**
      * Executes the currently built request
-     * 
+     *
      */
     public get(parser: (r: Response) => Promise<any> = this.defaultParser): Promise<any> {
         let client = new HttpClient();
@@ -142,7 +142,7 @@ export class Queryable {
         });
     }
 
-    protected post(postOptions: any = {}, parser: (r: Response) => Promise<any> = this.defaultParser): Promise<any> {
+    public post(postOptions: any = {}, parser: (r: Response) => Promise<any> = this.defaultParser): Promise<any> {
 
         let client = new HttpClient();
 
@@ -170,10 +170,10 @@ export class Queryable {
 
     /**
      * Default parser used to simply the parsing of standard SharePoint results
-     * 
+     *
      * @param r Response object from a successful fetch request
      */
-    private defaultParser(r: Response): Promise<any> {
+    public defaultParser(r: Response): Promise<any> {
         return r.json().then(function (json) {
             if (json.hasOwnProperty("d")) {
                 if (json.d.hasOwnProperty("results")) {
@@ -190,7 +190,7 @@ export class Queryable {
 
 /**
  * Represents a REST collection which can be filtered, paged, and selected
- * 
+ *
  */
 export class QueryableCollection extends Queryable {
 
@@ -208,7 +208,7 @@ export class QueryableCollection extends Queryable {
 
 /**
  * Represents an instance that can be selected
- * 
+ *
  */
 export class QueryableInstance extends Queryable {
 
