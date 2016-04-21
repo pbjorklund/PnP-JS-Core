@@ -4,8 +4,6 @@ import kernel from "./inversify.config";
 import { expect } from "chai";
 import { PnPInterface } from "./pnp";
 
-
-
 describe("PnP", () => {
     let pnp = kernel.get<PnPInterface>("PnPInterface");
 
@@ -15,6 +13,8 @@ describe("PnP", () => {
 
     it("sharepoint should not be null", () => {
         expect(pnp.sharepoint).to.not.be.null;
+
+        expect(pnp.sharepoint.rest.site.toUrlAndQuery()).to.equal("_api");
     });
 
     it("storage should not be null", () => {
