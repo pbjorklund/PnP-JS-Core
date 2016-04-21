@@ -1,9 +1,10 @@
 "use strict";
 
 import { expect } from "chai";
-import pnp = require("./pnp");
+import PnP = require("./pnp");
 
 describe("PnP", () => {
+    let pnp = new PnP();
 
     it("util should not be null", () => {
         expect(pnp.util).to.not.be.null;

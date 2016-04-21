@@ -1,6 +1,6 @@
 "use strict";
 
-import { Site } from "./site";
+import { Site, SiteInterface } from "./site";
 import { Web } from "./webs";
 import * as Util from "../../utils/util";
 import { Queryable } from "./queryable";
@@ -12,7 +12,7 @@ export class Rest {
 
     /**
      * Begins a site collection scoped REST request
-     * 
+     *
      * @param url The base url for the request, optional if running in the context of a page
      */
     public get site(): Site {
@@ -21,7 +21,7 @@ export class Rest {
 
     /**
      * Begins a web scoped REST request
-     * 
+     *
      * @param url The base url for the request, optional if running in the context of a page
      */
     public get web(): Web {
@@ -30,17 +30,17 @@ export class Rest {
 
     /**
      * Begins a cross-domain, host site scoped REST request, for use in add-in webs
-     * 
+     *
      * @param addInWebUrl The absolute url of the add-in web
      * @param hostWebUrl The absolute url of the host web
      */
-    public crossDomainSite(addInWebUrl: string, hostWebUrl: string): Site {
-        return this._cdImpl<Site>(Site, addInWebUrl, hostWebUrl, "site");
+    public crossDomainSite(addInWebUrl: string, hostWebUrl: string): SiteInterface {
+        return this._cdImpl<SiteInterface>(Site, addInWebUrl, hostWebUrl, "site");
     }
 
     /**
      * Begins a cross-domain, host web scoped REST request, for use in add-in webs
-     * 
+     *
      * @param addInWebUrl The absolute url of the add-in web
      * @param hostWebUrl The absolute url of the host web
      */
@@ -48,9 +48,9 @@ export class Rest {
         return this._cdImpl<Web>(Web, addInWebUrl, hostWebUrl, "web");
     }
 
-    /** 
+    /**
      * Implements the creation of cross domain REST urls
-     * 
+     *
      * @param factory The constructor of the object to create Site | Web
      * @param addInWebUrl The absolute url of the add-in web
      * @param hostWebUrl The absolute url of the host web

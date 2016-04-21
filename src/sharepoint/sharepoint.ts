@@ -1,19 +1,25 @@
+/// <reference path="../../node_modules/inversify/type_definitions/inversify/inversify.d.ts" />
+/// <reference path="../../node_modules/reflect-metadata/reflect-metadata.d.ts" />
+import "reflect-metadata";
 "use strict";
 
 import { Provisioning } from "./Provisioning/Provisioning";
 import { Rest } from "./Rest/Rest";
-import * as Util from "./Util";
+import { SiteInterface } from "./rest/site";
+import { injectable, inject } from "inversify";
 
-export class SharePoint {
-    /**
-     * The REST base class for SharePoint
-     */
-    public rest = new Rest();
+export interface SharePointInterface {
+    rest: Rest;
+    provisioning: Provisioning;
+}
 
-    /**
-    * The Provisioning base class for SharePoint
-    */
-    public provisioning: Provisioning = new Provisioning();
+@injectable()
+export class SharePoint implements SharePointInterface {
+    public rest: Rest;
+    public provisioning: Provisioning;
 
-    public util = Util;
+    constructor(@inject("SiteInterface") site: SiteInterface) {
+        this.rest = new Rest(site);
+        this.provisioning = new Provisioning();
+    }
 }
