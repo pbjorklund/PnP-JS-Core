@@ -94,7 +94,7 @@ function packageBundleUglify(file) {
         standalone: '$pnp',
         external: ["es6-promise", "jquery", "whatwg-fetch", "node-fetch"]
     }).ignore('*.d.ts').bundle()
-        .pipe(src(file + "min"))
+        .pipe(src(file + ".min"))
         .pipe(buffer())
         .pipe(srcmaps.init({ loadMaps: true }))
         .pipe(uglify())
