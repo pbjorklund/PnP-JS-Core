@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import { ContentTypes } from "../../../../src/core/sharepoint/rest/ContentTypes";
+import { ContentTypes } from "../../../../src/pnp/sharepoint/rest/ContentTypes";
 
 describe("ContentTypes", () => {
     it("Should be an object", () => {

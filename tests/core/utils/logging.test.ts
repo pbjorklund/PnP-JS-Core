@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import * as Logging from "../../../src/core/utils/logging";
+import * as Logging from "../../../src/pnp/utils/logging";
 
 describe("Logging", () => {
 

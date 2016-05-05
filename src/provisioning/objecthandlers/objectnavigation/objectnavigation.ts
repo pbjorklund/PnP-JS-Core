@@ -1,7 +1,7 @@
 "use strict";
 
 // import { Promise } from "es6-promise";
-import { getNodeFromCollectionByTitle, replaceUrlTokens } from "../../../core/sharepoint/util";
+import { getNodeFromCollectionByTitle, replaceUrlTokens } from "../../../pnp/sharepoint/util";
 import { ObjectHandlerBase } from "../ObjectHandlerBase/ObjectHandlerBase";
 import { INavigation } from "../schema/inavigation";
 import { INavigationNode } from "../schema/inavigationnode";

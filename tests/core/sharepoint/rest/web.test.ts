@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import { Web } from "../../../../src/core/sharepoint/rest/webs";
+import { Web } from "../../../../src/pnp/sharepoint/rest/webs";
 
 describe("Web", () => {
 

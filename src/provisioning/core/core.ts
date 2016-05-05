@@ -10,7 +10,7 @@ import { ObjectComposedLook } from "../ObjectHandlers/ObjectComposedLook/ObjectC
 import { ObjectCustomActions } from "../ObjectHandlers/ObjectCustomActions/ObjectCustomActions";
 import { ObjectFiles } from "../ObjectHandlers/ObjectFiles/ObjectFiles";
 import { ObjectLists } from "../ObjectHandlers/ObjectLists/ObjectLists";
-import { replaceUrlTokens } from "../../core/sharepoint/util";
+import { replaceUrlTokens } from "../../pnp/sharepoint/util";
 import * as Resources from "../Resources/Resources";
 import { Log } from "../Provisioning";
 import { SiteSchema } from "../schema/isiteschema";

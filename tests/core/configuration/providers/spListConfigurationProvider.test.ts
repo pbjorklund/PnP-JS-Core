@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { default as SPListConfigurationProvider } from "../../../../src/core/configuration/providers/spListConfigurationProvider";
+import { default as SPListConfigurationProvider } from "../../../../src/pnp/configuration/providers/spListConfigurationProvider";
 import MockStorage from "../../mocks/MockStorage";
-import * as Collections  from "../../../../src/core/collections/collections";
+import * as Collections  from "../../../../src/pnp/collections/collections";
 
 declare var global: any;
 

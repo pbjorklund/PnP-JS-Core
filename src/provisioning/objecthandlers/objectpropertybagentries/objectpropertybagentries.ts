@@ -1,7 +1,7 @@
 "use strict";
 
 // import { Promise } from "es6-promise";
-import { encodePropertyKey } from "../../../core/sharepoint/util";
+import { encodePropertyKey } from "../../../pnp/sharepoint/util";
 import { ObjectHandlerBase } from "../ObjectHandlerBase/ObjectHandlerBase";
 import { IPropertyBagEntry } from "../../schema/ipropertybagentry";
 

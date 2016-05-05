@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import { SiteUsers } from "../../../../src/core/sharepoint/rest/siteUsers";
+import { SiteUsers } from "../../../../src/pnp/sharepoint/rest/siteUsers";
 
 describe("SiteUsers", () => {
     it("Should be an object", () => {

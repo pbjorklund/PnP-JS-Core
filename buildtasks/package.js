@@ -1,7 +1,7 @@
 //******************************************************************************
 //* package.js
 //*
-//* Defines a custom gulp task for creating core.js, core.min.js,
+//* Defines a custom gulp task for creating pnp.js, pnp.min.js,
 //* provisioning.js, provisioning.min.js
 //* and pnp/provisioning.min.js.map in the dist folder
 //******************************************************************************
@@ -20,7 +20,8 @@ var gulp = require("gulp"),
     buffer = require("vinyl-buffer"),
     header = require('gulp-header'),
     srcmaps = require("gulp-sourcemaps"),
-    merge = require("merge2");
+    merge = require("merge2"),
+    replace = require("gulp-replace");
 
 // we need to build src (es5, umd) -> build
 // we need to package the definitions in a single file -> dist
@@ -79,6 +80,8 @@ function packageBundle(file) {
         external: ["es6-promise", "jquery", "whatwg-fetch", "node-fetch"]
     }).ignore('*.d.ts').bundle()
         .pipe(src(file + ".js"))
+        .pipe(replace(/Object\.defineProperty\(exports, "__esModule", \{ value: true \}\);/ig, ""))
+        .pipe(replace(/exports.default = PnP;/ig, "return PnP;"))
         .pipe(buffer())
         .pipe(header(banner, { pkg: global.pkg }))
         .pipe(gulp.dest(global.TSDist.RootFolder));
@@ -95,6 +98,8 @@ function packageBundleUglify(file) {
         external: ["es6-promise", "jquery", "whatwg-fetch", "node-fetch"]
     }).ignore('*.d.ts').bundle()
         .pipe(src(file + ".min"))
+        .pipe(replace(/Object\.defineProperty\(exports, "__esModule", \{ value: true \}\);/ig, ""))
+        .pipe(replace(/exports.default = PnP;/ig, "return PnP;"))
         .pipe(buffer())
         .pipe(srcmaps.init({ loadMaps: true }))
         .pipe(uglify())
@@ -107,10 +112,10 @@ function packageBundleUglify(file) {
 //* PACKAGE
 //******************************************************************************
 gulp.task("package", ["build", "test"], function () {
-    packageDefinitions("core");
+    packageDefinitions("pnp");
     packageLib();
-    packageBundle("core");
-    packageBundleUglify("core");
+    packageBundle("pnp");
+    packageBundleUglify("pnp");
 
     packageDefinitions("provisioning");
     packageLib();

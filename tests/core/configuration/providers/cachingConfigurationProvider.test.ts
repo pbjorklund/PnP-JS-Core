@@ -1,10 +1,10 @@
 import { expect } from "chai";
-import { default as CachingConfigurationProvider } from "../../../../src/core/configuration/providers/cachingConfigurationProvider";
-import  * as Collections  from "../../../../src/core/collections/collections";
-import * as Configuration from "../../../../src/core/configuration/configuration";
+import { default as CachingConfigurationProvider } from "../../../../src/pnp/configuration/providers/cachingConfigurationProvider";
+import  * as Collections  from "../../../../src/pnp/collections/collections";
+import * as Configuration from "../../../../src/pnp/configuration/configuration";
 import {default as MockConfigurationProvider} from "../../mocks/mockConfigurationProvider";
 import MockStorage from "../../mocks/MockStorage";
-import * as storage from "../../../../src/core/utils/storage";
+import * as storage from "../../../../src/pnp/utils/storage";
 
 describe("Configuration", () => {
 

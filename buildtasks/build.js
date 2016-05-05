@@ -13,6 +13,7 @@
 
 var gulp = require("gulp"),
     tsc = require("gulp-typescript"),
+    print = require('gulp-print'),
     replace = require('gulp-replace');
 
 //******************************************************************************
@@ -25,5 +26,6 @@ gulp.task("build", ["lint", "build-typings", "clean"], function () {
     return gulp.src(src)
         .pipe(tsc(global.tsProject))
         .js.pipe(replace(/(\(function \(factory\) {)/g, '$1/* istanbul ignore next */'))
-        .pipe(gulp.dest(global.TSCompiledOutput.RootFolder));
+        .pipe(gulp.dest(global.TSCompiledOutput.RootFolder))
+        .pipe(print());
 });

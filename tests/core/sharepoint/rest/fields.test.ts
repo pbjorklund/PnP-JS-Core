@@ -1,8 +1,8 @@
 "use strict";
 
-import { Util } from "../../../../src/core/utils/util";
+import { Util } from "../../../../src/pnp/utils/util";
 import { expect } from "chai";
-import { Fields, Field } from "../../../../src/core/sharepoint/rest/fields";
+import { Fields, Field } from "../../../../src/pnp/sharepoint/rest/fields";
 
 describe("Fields", () => {
 

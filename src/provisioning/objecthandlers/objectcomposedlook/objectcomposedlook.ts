@@ -2,7 +2,7 @@
 
 import { IComposedLook } from "../schema/icomposedlook";
 
-import { replaceUrlTokens, getRelativeUrl } from "../../../core/sharepoint/util";
+import { replaceUrlTokens, getRelativeUrl } from "../../../pnp/sharepoint/util";
 import { ObjectHandlerBase } from "../ObjectHandlerBase/ObjectHandlerBase";
 
 export class ObjectComposedLook extends ObjectHandlerBase {

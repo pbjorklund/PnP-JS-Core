@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import * as Storage from "../../../src/core/utils/Storage";
+import * as Storage from "../../../src/pnp/utils/Storage";
 import MockStorage  from "../mocks/MockStorage";
 
 describe("Storage", () => {

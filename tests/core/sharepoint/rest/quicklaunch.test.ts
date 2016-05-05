@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import { QuickLaunch } from "../../../../src/core/sharepoint/rest/quickLaunch";
+import { QuickLaunch } from "../../../../src/pnp/sharepoint/rest/quickLaunch";
 
 describe("QuickLaunch", () => {
     it("Should be an object", () => {

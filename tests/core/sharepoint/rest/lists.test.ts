@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import { Lists, List } from "../../../../src/core/sharepoint/rest/lists";
+import { Lists, List } from "../../../../src/pnp/sharepoint/rest/lists";
 
 describe("Lists", () => {
 

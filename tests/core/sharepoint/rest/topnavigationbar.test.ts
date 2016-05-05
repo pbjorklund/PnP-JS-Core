@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import { TopNavigationBar } from "../../../../src/core/sharepoint/rest/topNavigationBar";
+import { TopNavigationBar } from "../../../../src/pnp/sharepoint/rest/topNavigationBar";
 
 describe("TopNavigationBar", () => {
     it("Should be an object", () => {

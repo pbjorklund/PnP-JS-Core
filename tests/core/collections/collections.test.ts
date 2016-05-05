@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import  * as Collections  from "../../../src/core/collections/collections";
+import  * as Collections  from "../../../src/pnp/collections/collections";
 
 describe("Collections", () => {
 

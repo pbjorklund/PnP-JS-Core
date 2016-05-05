@@ -1,7 +1,7 @@
 "use strict";
 
 import { expect } from "chai";
-import { Search } from "../../../../src/core/sharepoint/rest/search";
+import { Search } from "../../../../src/pnp/sharepoint/rest/search";
 
 describe("Search", () => {
     it("Should be an object", () => {

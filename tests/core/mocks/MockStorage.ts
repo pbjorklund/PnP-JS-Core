@@ -1,6 +1,6 @@
 "use strict";
 
-import * as Collections  from "../../../src/core/collections/collections";
+import * as Collections  from "../../../src/pnp/collections/collections";
 
 export default class MockStorage implements Storage {
     constructor() {

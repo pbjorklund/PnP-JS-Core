@@ -28,7 +28,7 @@ global.TSCompiledOutput = {
 
 global.TSWorkspace = {
     "RootFolder": 'src',
-    "PnPFile": "src/core.ts",
+    "PnPFile": "src/pnp.ts",
     "Files": [
         'src/**/*.ts',
     ],
