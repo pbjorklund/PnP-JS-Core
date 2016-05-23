@@ -14,18 +14,20 @@
 var gulp = require("gulp"),
     tsc = require("gulp-typescript"),
     print = require('gulp-print'),
-    replace = require('gulp-replace');
+    replace = require('gulp-replace'),
+    plumber = require('gulp-plumber');
 
 //******************************************************************************
 //* BUILD
 //******************************************************************************
-gulp.task("build", ["lint", "build-typings", "clean"], function () {
+gulp.task("build", ["lint", "clean", "build-typings"], function () {
     var src = global.TSWorkspace.Files.slice(0);
     src.push(global.TSTypings.Main);
 
 //        .js.pipe(replace(/(\(function \(factory\) {)/g, '$1/* istanbul ignore next */'))
 
     return gulp.src(src)
+        .pipe(plumber({ errorHandler: (err) => console.log(err.toString()) }))
         .pipe(tsc(global.tsProject))
         .pipe(gulp.dest(global.TSCompiledOutput.RootFolder))
         .pipe(print());

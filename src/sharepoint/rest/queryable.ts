@@ -3,8 +3,13 @@
 import { Util } from "../../utils/util";
 import { Dictionary } from "../../collections/collections";
 import { HttpClient } from "../../net/HttpClient";
+import { ODataParser, ODataDefaultParser } from "./odata";
 
 declare var _spPageContextInfo: any;
+
+export interface QueryableConstructor<T> {
+    new (baseUrl: string | Queryable, path?: string): T;
+}
 
 /**
  * Queryable Base Class
@@ -134,7 +139,37 @@ export class Queryable {
      * Executes the currently built request
      *
      */
-    public get(parser: (r: Response) => Promise<any> = this.defaultParser): Promise<any> {
+    public get(parser: ODataParser<any, any> = new ODataDefaultParser()): Promise<any> {
+        return this.getImpl(parser);
+    }
+
+    public getAs<T, U>(parser: ODataParser<T, U> = new ODataDefaultParser()): Promise<U> {
+        return this.getImpl(parser);
+    }
+
+    protected post(postOptions: any = {}, parser: ODataParser<any, any> = new ODataDefaultParser()): Promise<any> {
+        return this.postImpl(postOptions, parser);
+    }
+
+    protected postAs<T, U>(postOptions: any = {}, parser: ODataParser<T, U> = new ODataDefaultParser()): Promise<U> {
+        return this.postImpl(postOptions, parser);
+    }
+
+    /**
+     * Gets a parent for this isntance as specified
+     *
+     * @param factory The contructor for the class to create
+     */
+    protected getParent<T extends Queryable>(factory: { new (q: string | Queryable): T }, baseUrl: string | Queryable = this.parentUrl): T {
+        let parent = new factory(baseUrl);
+        let target = this.query.get("@target");
+        if (target !== null) {
+            parent.query.add("@target", target);
+        }
+        return parent;
+    }
+
+    private getImpl<U>(parser: ODataParser<any, U>): Promise<U> {
         let client = new HttpClient();
         return client.get(this.toUrlAndQuery()).then(function (response) {
 
@@ -142,14 +177,11 @@ export class Queryable {
                 throw "Error making GET request: " + response.statusText;
             }
 
-            return parser(response);
-
-        }).then(function (parsed) {
-            return parsed.hasOwnProperty("d") ? parsed.d.hasOwnProperty("results") ? parsed.d.results : parsed.d : parsed;
+            return parser.parse(response);
         });
     }
 
-    protected post(postOptions: any = {}, parser: (r: Response) => Promise<any> = this.defaultParser): Promise<any> {
+    private postImpl<U>(postOptions: any, parser: ODataParser<any, U>): Promise<U> {
 
         let client = new HttpClient();
 
@@ -171,40 +203,7 @@ export class Queryable {
             }
 
             // pipe our parsed content
-            return parser(response);
-        });
-    }
-
-    /**
-     * Gets a parent for this isntance as specified
-     *
-     * @param factory The contructor for the class to create
-     */
-    protected getParent<T extends Queryable>(factory: { new (q: string | Queryable): T }, baseUrl: string | Queryable = this.parentUrl): T {
-        let parent = new factory(baseUrl);
-        let target = this.query.get("@target");
-        if (target !== null) {
-            parent.query.add("@target", target);
-        }
-        return parent;
-    }
-
-    /**
-     * Default parser used to simply the parsing of standard SharePoint results
-     *
-     * @param r Response object from a successful fetch request
-     */
-    private defaultParser(r: Response): Promise<any> {
-        return r.json().then(function (json) {
-            if (json.hasOwnProperty("d")) {
-                if (json.d.hasOwnProperty("results")) {
-                    return json.d.results;
-                }
-                return json.d;
-            } else if (json.hasOwnProperty("value")) {
-                return json.value;
-            }
-            return json;
+            return parser.parse(response);
         });
     }
 }

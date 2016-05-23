@@ -318,7 +318,7 @@ export class List extends QueryableSecurable {
         // don't change "this" instance of the List, make a new one
         let q = new List(this, "getlistitemchangessincetoken");
         // note we are using a custom parser to return text as the response is an xml doc
-        return q.post({ body: postBody }, (r) => r.text());
+        return q.post({ body: postBody }, { parse(r) { return r.text(); } });
     }
 
     /**
