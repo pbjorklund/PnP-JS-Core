@@ -6,9 +6,9 @@ export interface ODataParser<T, U> {
 }
 
 export class ODataDefaultParser implements ODataParser<any, any> {
-
+    constructor(private parser: IJsonParser = new JsonParser()) { }
     public parse(r: Response): Promise<any> {
-        return parseImpl(r);
+        return this.parser.parse(r);
     }
 }
 
@@ -24,18 +24,19 @@ export function ODataEntityArray<T>(factory: QueryableConstructor<T>): ODataPars
     return new ODataEntityArrayParserImpl<T>(factory);
 }
 
-class ODataValueParserImpl<T> implements ODataParser<any, T> {
+export class ODataValueParserImpl<T> implements ODataParser<any, T> {
+    constructor(private parser: IJsonParser = new JsonParser()) { }
     public parse(r: Response): Promise<T> {
-        return parseImpl(r).then(d => d as T);
+        return this.parser.parse(r).then(d => d as T);
     }
 }
 
 class ODataEntityParserImpl<T> implements ODataParser<T, T> {
 
-    constructor(protected factory: QueryableConstructor<T>) { }
+    constructor(protected factory: QueryableConstructor<T>, private parser: IJsonParser = new JsonParser()) { }
 
     public parse(r: Response): Promise<T> {
-        return parseImpl(r).then(d => {
+        return this.parser.parse(r).then(d => {
             let o = new this.factory(d["odata.editLink"]);
             return Util.extend(o, d);
         });
@@ -44,10 +45,10 @@ class ODataEntityParserImpl<T> implements ODataParser<T, T> {
 
 class ODataEntityArrayParserImpl<T> implements ODataParser<T, T[]> {
 
-    constructor(protected factory: QueryableConstructor<T>) { }
+    constructor(protected factory: QueryableConstructor<T>, private parser: IJsonParser = new JsonParser()) { }
 
     public parse(r: Response): Promise<T[]> {
-        return parseImpl(r).then((d: any[]) => {
+        return this.parser.parse(r).then((d: any[]) => {
             return d.map(v => {
                 let o = new this.factory(v["odata.editLink"]);
                 return Util.extend(o, v);
@@ -56,22 +57,28 @@ class ODataEntityArrayParserImpl<T> implements ODataParser<T, T[]> {
     }
 }
 
-function parseImpl(r: Response): Promise<any> {
+export interface IJsonParser {
+    parse(r: Response): Promise<any>;
+}
 
-    return r.json().then(function (json) {
+class JsonParser implements IJsonParser {
+    public parse(r: Response): Promise<any> {
 
-        if (json.hasOwnProperty("d")) {
-            if (json.d.hasOwnProperty("results")) {
-                return json.d.results;
+        return r.json().then(function (json) {
+
+            if (json.hasOwnProperty("d")) {
+                if (json.d.hasOwnProperty("results")) {
+                    return json.d.results;
+                }
+
+                return json.d;
+
+            } else if (json.hasOwnProperty("value")) {
+
+                return json.value;
             }
 
-            return json.d;
-
-        } else if (json.hasOwnProperty("value")) {
-
-            return json.value;
-        }
-
-        return json;
-    });
+            return json;
+        });
+    }
 }
